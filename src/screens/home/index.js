@@ -2,64 +2,87 @@ import React from 'react';
 import {
   View,
   Text,
+  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Strings, MarginVal, Colors } from '../../assets/constants';
+import * as Data from '../../assets/data';
+import { getRandomHexColor } from '../../utils';
 
-// sample data
-const categories = [
-  { id: '1', name: 'Food', icon: 'restaurant' },
-  { id: '2', name: 'Travel', icon: 'flight' },
-  { id: '3', name: 'Shopping', icon: 'shopping-cart' },
-  { id: '4', name: 'Health', icon: 'fitness-center' },
-  { id: '5', name: 'Work', icon: 'work' },
-];
+const { width } = Dimensions.get('window');
+const ITEM_WIDTH = width / 1.3;
 
-// CategoryList component
-const Home = ({ onSelectCategory }) => {
-  const renderItem = ({ item }) => (
+const Home = ({ navigation }) => {
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity
-      style={styles.card}
-      onPress={() => onSelectCategory(item)}
+      style={styles.itemContainer(index)}
+      activeOpacity={0.7}
+      onPress={() =>
+        navigation.navigate('Detail', {
+          category: item.title,
+          imgPath: item.icon,
+        })
+      }
     >
-      <Text style={styles.label}>{item.name}</Text>
+      <Image source={item.icon} style={styles.icon} />
+      <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <FlatList
-      data={categories}
-      keyExtractor={item => item.id}
-      renderItem={renderItem}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.listContainer}
-    />
+    <View style={styles.container}>
+      <Text style={styles.txt_title}>{Strings.title_categories}</Text>
+      <FlatList
+        data={Data.categories}
+        keyExtractor={item => item?.id}
+        renderItem={renderItem}
+        numColumns={2}
+        contentContainerStyle={styles.listContainer}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 };
 
 export default Home;
 
-// styles
 const styles = StyleSheet.create({
+  container: {
+    marginVertical: MarginVal,
+  },
+  txt_title: {
+    fontSize: 20,
+    marginHorizontal: MarginVal,
+  },
   listContainer: {
-    paddingHorizontal: 16,
+    margin: MarginVal,
   },
-  card: {
-    flexDirection: 'row',
+  row: {
+    marginBottom: MarginVal,
+    flex: 1,
+  },
+  itemContainer: index => ({
+    width: '47%',
     alignItems: 'center',
-    backgroundColor: '#F0F4F7',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginRight: 12,
-  },
+    backgroundColor: Colors.app_white,
+    borderRadius: MarginVal,
+    paddingVertical: MarginVal,
+    marginRight: index % 2 == 0 ? '6%' : 0,
+  }),
   icon: {
-    marginRight: 8,
+    width: ITEM_WIDTH * 0.5,
+    height: ITEM_WIDTH * 0.5,
+    marginBottom: 8,
+    resizeMode: 'contain',
+    borderRadius:10
   },
-  label: {
-    fontSize: 16,
+  title: {
+    fontSize: 14,
     color: '#333',
   },
 });
