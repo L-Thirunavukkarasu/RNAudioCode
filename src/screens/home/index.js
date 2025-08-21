@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,21 +11,35 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Strings, MarginVal, Colors } from '../../assets/constants';
 import * as Data from '../../assets/data';
-import { getRandomHexColor } from '../../utils';
+import ModalView from '../../components/model';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width / 1.3;
 
 const Home = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleCancel = () => {
+    setModalVisible(false);
+    // any extra “keep editing” logic
+  };
+
+  const handleConfirm = () => {
+    setModalVisible(false);
+    // perform discard action here
+  };
   const renderItem = ({ item, index }) => (
     <TouchableOpacity
       style={styles.itemContainer(index)}
       activeOpacity={0.7}
       onPress={() =>
-        navigation.navigate('Detail', {
-          category: item.title,
-          imgPath: item.icon,
-        })
+        // navigation.navigate('Detail', {
+        //   category: item.title,
+        //   imgPath: item.icon,
+        // })
+        {
+          setModalVisible(true);
+        }
       }
     >
       <Image source={item.icon} style={styles.icon} />
@@ -44,6 +58,11 @@ const Home = ({ navigation }) => {
         contentContainerStyle={styles.listContainer}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
+      />
+      <ModalView
+        visible={modalVisible}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
       />
     </View>
   );
@@ -79,7 +98,7 @@ const styles = StyleSheet.create({
     height: ITEM_WIDTH * 0.5,
     marginBottom: 8,
     resizeMode: 'contain',
-    borderRadius:10
+    borderRadius: 10,
   },
   title: {
     fontSize: 14,

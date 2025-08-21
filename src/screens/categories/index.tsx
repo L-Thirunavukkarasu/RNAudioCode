@@ -24,28 +24,33 @@ const ITEM_WIDTH = width / 1.3;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Detail'>;
 
-const DetailScreen = ({ route }: Props) => {
-  const { category, imgPath } = route.params;
+const DetailScreen = ({ route, navigation }: Props) => {
+  const { category, imgPath } = route?.params
+    ? route?.params
+    : { category: '', imgPath: '' };
   const [name, setName] = useState<string>('');
   const [mobile, setMobile] = useState<string>('');
   const [selectedCallType, setSelectedCallType] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const mobileRef = useRef<TextInput>(null);
+  
 
   const handleSubmit = () => {
     Keyboard.dismiss();
-    if (!name.trim() || !mobile.trim() || !selectedCallType.trim()) {
+    if (!name.trim() || !mobile.trim()) {
       Alert.alert('Please fill in all fields');
       return;
-    }
-    if (selectedCallType.trim() == 'pstn') {
-      openDialPad();
     } else {
-      Alert.alert(
-        'Submitted',
-        `Name: ${name}\nMobile: ${mobile}\nCall type: ${selectedCallType}`,
-      );
+      navigation.navigate('Home');
     }
+    // if (selectedCallType.trim() == 'pstn') {
+    //   openDialPad();
+    // } else {
+    //   Alert.alert(
+    //     'Submitted',
+    //     `Name: ${name}\nMobile: ${mobile}\nCall type: ${selectedCallType}`,
+    //   );
+    // }
   };
 
   const openDialPad = async () => {
@@ -99,20 +104,22 @@ const DetailScreen = ({ route }: Props) => {
             returnKeyType="done"
           />
         </View>
-        <View style={styles.field}>
+        {/* <View style={styles.field}>
           <Text style={styles.label}>Call Type</Text>
           <CheckboxGroup
             SelectedOption={(value: any) => setSelectedCallType(value)}
           />
-        </View>
+        </View> */}
 
         <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
-          <Text style={styles.label}>Submit</Text>
+          <Text style={styles.label}>Proceed</Text>
         </TouchableOpacity>
+       
       </View>
       <View style={styles.absolute}>
         <Image source={imgPath} style={styles.icon} />
       </View>
+
     </KeyboardAvoidingView>
   );
 };
@@ -168,14 +175,14 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     top: MarginVal * 2,
-    borderWidth:0.3,
-    borderColor:Colors.app_gray
+    borderWidth: 0.3,
+    borderColor: Colors.app_gray,
   },
   icon: {
     width: ITEM_WIDTH * 0.3,
     height: ITEM_WIDTH * 0.3,
     resizeMode: 'contain',
-    borderRadius:10
+    borderRadius: 10,
   },
 });
 

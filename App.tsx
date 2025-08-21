@@ -5,8 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/screens/home';
 import CategoryScreen from './src/screens/categories';
 import DialPadScreen from './src/screens/dialpad';
+import InitScreen from './src/screens/getstarted';
 
 export type RootStackParamList = {
+  InitScreen: undefined;
   Home: undefined;
   Detail: {
     category: string;
@@ -19,7 +21,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="InitScreen"
+      >
+        <Stack.Screen name="InitScreen" component={InitScreen} options={{headerShown: false}} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Detail" component={CategoryScreen} />
       </Stack.Navigator>
