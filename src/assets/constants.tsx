@@ -10,6 +10,7 @@ const Colors = {
   app_gray: '#bfbfbf',
   app_light_yellow: '#fff3ca',
   app_white: '#ffffff',
+  app_red: '#eb1800',
 };
 
 export { Strings, Colors, MarginVal };

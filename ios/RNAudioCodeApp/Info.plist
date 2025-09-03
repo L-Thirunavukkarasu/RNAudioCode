@@ -54,5 +54,12 @@
     <string>tel</string>
     <string>telprompt</string>
   </array>
+  <key>NSCameraUsageDescription</key>
+<string>We use the camera to scan documents securely.</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We use your location to verify branch proximity.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We use the microphone for secure voice authentication.</string>
+
 </dict>
 </plist>

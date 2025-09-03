@@ -7,13 +7,20 @@ import {
   Linking,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Colors } from '../../assets/constants';
 import ModalView from '../../components/model';
+import { requestAllPermissions } from '../../services/permissions';
 
 const index = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('1234567890');
+
+  useEffect(() => {
+    (async () => {
+      await requestAllPermissions();
+    })();
+  }, []);
 
   const handleCancel = (val: number) => {
     setModalVisible(false);
@@ -51,7 +58,7 @@ const index = () => {
         style={styles.btn}
         onPress={() => setModalVisible(true)}
       >
-        <Text>Make a Call</Text>
+        <Text style={styles.txt}>Make a Call</Text>
       </TouchableOpacity>
       <ModalView
         visible={modalVisible}
@@ -72,7 +79,10 @@ const styles = StyleSheet.create({
   },
   btn: {
     padding: 10,
-    backgroundColor: Colors.app_yellow,
+    backgroundColor: Colors.app_red,
     borderRadius: 10,
+  },
+  txt: {
+    color: Colors.app_white,
   },
 });
