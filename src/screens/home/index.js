@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Platform,
+  Alert,
+  Linking,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Strings, MarginVal, Colors } from '../../assets/constants';
@@ -18,15 +21,35 @@ const ITEM_WIDTH = width / 1.3;
 
 const Home = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('1234567890');
 
   const handleCancel = () => {
     setModalVisible(false);
     // any extra “keep editing” logic
+    openDialPad();
   };
 
   const handleConfirm = () => {
     setModalVisible(false);
     // perform discard action here
+  };
+
+  const openDialPad = async () => {
+    // Use telprompt on iOS to skip the confirmation dialog
+    const scheme = Platform.OS === 'ios' ? 'telprompt:' : 'tel:';
+    const url = `${scheme}${phoneNumber}`;
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        Alert.alert('Error', 'Dialing is not supported on this device');
+        return;
+      }
+      await Linking.openURL(url);
+    } catch (err) {
+      Alert.alert('Error', 'Failed to open dialer');
+      console.error(err);
+    }
   };
   const renderItem = ({ item, index }) => (
     <TouchableOpacity

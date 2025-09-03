@@ -6,6 +6,7 @@ import Home from './src/screens/home';
 import CategoryScreen from './src/screens/categories';
 import DialPadScreen from './src/screens/dialpad';
 import InitScreen from './src/screens/getstarted';
+import AudioCode from './src/screens/audiocode';
 
 export type RootStackParamList = {
   InitScreen: undefined;
@@ -14,6 +15,7 @@ export type RootStackParamList = {
     category: string;
     imgPath: any;
   };
+  AudioCode: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -21,12 +23,19 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="InitScreen"
-      >
-        <Stack.Screen name="InitScreen" component={InitScreen} options={{headerShown: false}} />
+      <Stack.Navigator initialRouteName="InitScreen">
+        <Stack.Screen
+          name="InitScreen"
+          component={InitScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Detail" component={CategoryScreen} />
+        <Stack.Screen
+          name="AudioCode"
+          component={AudioCode}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

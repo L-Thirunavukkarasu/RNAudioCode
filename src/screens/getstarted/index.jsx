@@ -13,10 +13,11 @@ const { width, height } = Dimensions.get('window');
 
 const InitScreen =({ navigation }) => {
   const handlePress = () => {
-    navigation.replace('Detail',{
-        category: '',
-        imgPath: require('../../assets/images/img_glob_service.png'),
-      }); // swap in your actual route
+    // navigation.replace('Detail',{
+    //     category: '',
+    //     imgPath: require('../../assets/images/img_glob_service.png'),
+    //   }); // swap in your actual route
+    navigation.replace('AudioCode');
   };
 
   return (

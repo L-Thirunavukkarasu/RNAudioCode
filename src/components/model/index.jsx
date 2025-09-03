@@ -7,56 +7,51 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
 const BUTTON_WIDTH = width * 0.35;
 
-const ModalView = ({
-  visible,
-  onCancel,
-  onConfirm,
-}) => {
+const ModalView = ({ visible, onCancel, onConfirm }) => {
   return (
     <Modal
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onCancel}
-      
+      onRequestClose={() => onCancel(1)}
     >
-            <TouchableWithoutFeedback onPress={onCancel}>
-      <View style={styles.backdrop}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Call Type</Text>
-          <Text style={styles.message}>
-            Please select the call type! to proceed the request
-          </Text>
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={[styles.button, styles.outlineButton]}
-              onPress={onCancel}
-            >
-              <Text style={[styles.buttonText, styles.outlineText]}>
-               PSTN Call
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.filledButton]}
-              onPress={onConfirm}
-            >
-              <Text style={[styles.buttonText, styles.filledText]}>
-                VOIP Call
-              </Text>
-            </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => onCancel(0)}>
+        <View style={styles.backdrop}>
+          <View style={styles.container}>
+            <Text style={styles.title}>Call Type</Text>
+            <Text style={styles.message}>
+              Please select the call type! to proceed the request
+            </Text>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={[styles.button, styles.outlineButton]}
+                onPress={() => onCancel(1)}
+              >
+                <Text style={[styles.buttonText, styles.outlineText]}>
+                  PSTN Call
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.filledButton]}
+                onPress={onConfirm}
+              >
+                <Text style={[styles.buttonText, styles.filledText]}>
+                  VOIP Call
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
       </TouchableWithoutFeedback>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   backdrop: {
@@ -97,7 +92,7 @@ const styles = StyleSheet.create({
   },
   outlineButton: {
     backgroundColor: '#888',
-    marginRight:5,
+    marginRight: 5,
   },
   filledButton: {
     backgroundColor: '#eb1800',
@@ -113,6 +108,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
 
 export default ModalView;
