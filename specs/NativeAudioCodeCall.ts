@@ -1,10 +1,12 @@
-// spec.ts — TurboModule spec for Genesys + AudioCode OUTGOING calls only
+// NativeAudioCodeCall.ts (or NativeAudioCodeCallSpec.ts)
+// TurboModule spec for Genesys + AudioCode OUTGOING calls only
 
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
+import type {TurboModule} from 'react-native';
+import {TurboModuleRegistry} from 'react-native';
 
+// Aliases (keep primitives simple)
 export type CallId = string;
-export type Environment = 'dev' | 'staging' | 'prod' | string;
+export type Environment = string; // simplify: was 'dev' | 'staging' | 'prod' | string
 export type AudioRoute = 'earpiece' | 'speaker' | 'wired' | 'bluetooth';
 export type CallStatus =
   | 'idle'
@@ -17,6 +19,7 @@ export type CallStatus =
   | 'disconnected'
   | 'failed';
 
+// Config objects
 export type InitConfig = {
   env: Environment;
   region?: string;
@@ -35,10 +38,11 @@ export type InitConfig = {
 
 export type StartCallParams = {
   destination: string; // phone number, SIP URI, queue, etc.
-  customData?: Record<string, string>;
+  customData?: { [key: string]: string };
   preferredRoute?: AudioRoute;
 };
 
+// Payloads (pure objects with supported primitives only)
 export type CallUpdatedPayload = {
   callId: CallId;
   status: CallStatus;
@@ -55,7 +59,7 @@ export type CallDisconnectedPayload = {
 export type ErrorPayload = {
   code: string;
   message: string;
-  details?: Record<string, unknown>;
+  details?: { [key: string]: string | number | boolean | null };
 };
 
 export type AudioRouteChangedPayload = {
@@ -79,22 +83,14 @@ export type NetworkQualityPayload = {
   packetLossPct?: number;
 };
 
-/**
- * Outgoing-call–only events
- */
-export type GenesysAudioCodeEvent =
-  | 'onCallRinging'
-  | 'onCallConnecting'
-  | 'onCallConnected'
-  | 'onCallHeld'
-  | 'onCallResumed'
-  | 'onCallDisconnected'
-  | 'onCallFailed'
-  | 'onMuteChanged'
-  | 'onHoldChanged'
-  | 'onAudioRouteChanged'
-  | 'onNetworkQuality'
-  | 'onError';
+// Event names (keep as string to avoid any union parsing edge cases)
+export type GenesysAudioCodeEvent = string;
+
+// Return wrapper instead of nullable/union to avoid mixed-type unions
+export type NetworkQualityResult = {
+  available: boolean;
+  metrics?: NetworkQualityPayload; // present only if available === true
+};
 
 export interface Spec extends TurboModule {
   /** Initialize SDK */
@@ -133,13 +129,12 @@ export interface Spec extends TurboModule {
   isMuted(callId: CallId): Promise<boolean>;
   isOnHold(callId: CallId): Promise<boolean>;
 
-  /** Network quality metrics */
-  getCurrentNetworkQuality(callId: CallId): Promise<NetworkQualityPayload | null>;
+  /** Network quality metrics (no unions) */
+  getCurrentNetworkQuality(callId: CallId): Promise<NetworkQualityResult>;
 
   /** Required for RN event emitter */
   addListener(eventName: GenesysAudioCodeEvent): void;
   removeListeners(count: number): void;
 }
 
-const moduleName = 'NativeAudioCodeCall';
-export default TurboModuleRegistry.getEnforcing<Spec>(moduleName);
+export default TurboModuleRegistry.getEnforcing<Spec>('NativeAudioCodeCall');

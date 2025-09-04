@@ -10,6 +10,7 @@ import {
   Platform,
   Alert,
   Linking,
+  TurboModuleRegistry
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Strings, MarginVal, Colors } from '../../assets/constants';
@@ -17,12 +18,27 @@ import * as Data from '../../assets/data';
 import ModalView from '../../components/model';
 import { requestAllPermissions } from '../../services/permissions';
 
+// Import the generated type from your spec file
+import type {Spec as NativeAudioCodeCallSpec} from '../../../specs/NativeAudioCodeCall';
+
+// Get the TurboModule instance
+const NativeAudioCodeCall =
+  TurboModuleRegistry.getEnforcing<NativeAudioCodeCallSpec>(
+    'NativeAudioCodeCall'
+  );
+
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width / 1.3;
 
-const Home = ({ navigation }) => {
+const Home = ({ }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('1234567890');
+  const [status, setStatus] = useState<string>('Idle');
+
+  useEffect(() => {
+    // Optional: auto‑test on mount
+    testNativeModule();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -30,7 +46,19 @@ const Home = ({ navigation }) => {
     })();
   }, []);
 
-  const handleCancel = val => {
+  const testNativeModule = async () => {
+    try {
+      setStatus('Calling native module...');
+      // Example: Replace with your actual method from the spec
+      const result = await NativeAudioCodeCall.startCall?.({destination:'12345'});
+      setStatus(`Native call success: ${JSON.stringify(result)}`);
+    } catch (err) {
+      console.error(err);
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  };
+
+  const handleCancel = (val: number) => {
     setModalVisible(false);
     // any extra “keep editing” logic
     if (val === 1) {
@@ -60,7 +88,7 @@ const Home = ({ navigation }) => {
       console.error(err);
     }
   };
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item, index }:any) => (
     <TouchableOpacity
       style={styles.itemContainer(index)}
       activeOpacity={0.7}
@@ -117,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: MarginVal,
     flex: 1,
   },
-  itemContainer: index => ({
+  itemContainer: (index: number) => ({
     width: '47%',
     alignItems: 'center',
     backgroundColor: Colors.app_white,

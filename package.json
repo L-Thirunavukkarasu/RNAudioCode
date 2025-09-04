@@ -10,6 +10,14 @@
     "test": "jest",
     "pod_install": "cd ios && pod install && cd .."
   },
+  "codegenConfig": {
+    "name": "NativeAudioCodeCall",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.nativeaudiocodecall"
+    }
+  },
   "dependencies": {
     "@react-native/new-app-screen": "0.81.0",
     "@react-navigation/native": "^7.1.17",
