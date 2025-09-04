@@ -11,13 +11,13 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-const InitScreen =({ navigation }) => {
+const InitScreen = ({ navigation }) => {
   const handlePress = () => {
-    // navigation.replace('Detail',{
-    //     category: '',
-    //     imgPath: require('../../assets/images/img_glob_service.png'),
-    //   }); // swap in your actual route
-    navigation.replace('AudioCode');
+    navigation.replace('Detail', {
+      category: '',
+      imgPath: require('../../assets/images/img_glob_service.png'),
+    }); // swap in your actual route
+    //navigation.replace('AudioCode');
   };
 
   return (
@@ -41,7 +41,7 @@ const InitScreen =({ navigation }) => {
       </View>
     </View>
   );
-}
+};
 
 const BUTTON_HEIGHT = 50;
 const BUTTON_WIDTH = width * 0.8;
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    justifyContent:'center',
-    paddingTop:'30%'
+    justifyContent: 'center',
+    paddingTop: '30%',
   },
   logo: {
     width: width * 0.4,
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     borderRadius: BUTTON_HEIGHT / 2,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,            // Android shadow
-    shadowColor: '#000',     // iOS shadow
+    elevation: 3, // Android shadow
+    shadowColor: '#000', // iOS shadow
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
   },

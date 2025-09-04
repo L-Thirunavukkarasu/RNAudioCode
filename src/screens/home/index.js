@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Strings, MarginVal, Colors } from '../../assets/constants';
 import * as Data from '../../assets/data';
 import ModalView from '../../components/model';
+import { requestAllPermissions } from '../../services/permissions';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width / 1.3;
@@ -23,10 +24,18 @@ const Home = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('1234567890');
 
-  const handleCancel = () => {
+  useEffect(() => {
+    (async () => {
+      await requestAllPermissions();
+    })();
+  }, []);
+
+  const handleCancel = val => {
     setModalVisible(false);
     // any extra “keep editing” logic
-    openDialPad();
+    if (val === 1) {
+      openDialPad();
+    }
   };
 
   const handleConfirm = () => {
