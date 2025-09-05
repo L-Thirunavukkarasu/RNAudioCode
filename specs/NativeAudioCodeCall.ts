@@ -1,8 +1,8 @@
 // NativeAudioCodeCall.ts (or NativeAudioCodeCallSpec.ts)
 // TurboModule spec for Genesys + AudioCode OUTGOING calls only
 
-import type {TurboModule} from 'react-native';
-import {TurboModuleRegistry} from 'react-native';
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
 // Aliases (keep primitives simple)
 export type CallId = string;
@@ -40,6 +40,7 @@ export type StartCallParams = {
   destination: string; // phone number, SIP URI, queue, etc.
   customData?: { [key: string]: string };
   preferredRoute?: AudioRoute;
+  userName?: string;
 };
 
 // Payloads (pure objects with supported primitives only)

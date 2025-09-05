@@ -28,12 +28,11 @@ const DetailScreen = ({ route, navigation }: Props) => {
   const { category, imgPath } = route?.params
     ? route?.params
     : { category: '', imgPath: '' };
-  const [name, setName] = useState<string>('');
-  const [mobile, setMobile] = useState<string>('');
+  const [name, setName] = useState<string>('test');
+  const [mobile, setMobile] = useState<string>('1234567890');
   const [selectedCallType, setSelectedCallType] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const mobileRef = useRef<TextInput>(null);
-  
 
   const handleSubmit = () => {
     Keyboard.dismiss();
@@ -114,12 +113,10 @@ const DetailScreen = ({ route, navigation }: Props) => {
         <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
           <Text style={styles.label}>Proceed</Text>
         </TouchableOpacity>
-       
       </View>
       <View style={styles.absolute}>
         <Image source={imgPath} style={styles.icon} />
       </View>
-
     </KeyboardAvoidingView>
   );
 };

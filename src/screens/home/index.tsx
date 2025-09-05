@@ -10,7 +10,8 @@ import {
   Platform,
   Alert,
   Linking,
-  TurboModuleRegistry
+  TurboModuleRegistry,
+  NativeEventEmitter,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Strings, MarginVal, Colors } from '../../assets/constants';
@@ -19,18 +20,18 @@ import ModalView from '../../components/model';
 import { requestAllPermissions } from '../../services/permissions';
 
 // Import the generated type from your spec file
-import type {Spec as NativeAudioCodeCallSpec} from '../../../specs/NativeAudioCodeCall';
+import type { Spec as NativeAudioCodeCallSpec } from '../../../specs/NativeAudioCodeCall';
 
 // Get the TurboModule instance
 const NativeAudioCodeCall =
   TurboModuleRegistry.getEnforcing<NativeAudioCodeCallSpec>(
-    'NativeAudioCodeCall'
+    'NativeAudioCodeCall',
   );
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width / 1.3;
 
-const Home = ({ }) => {
+const Home = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('1234567890');
   const [status, setStatus] = useState<string>('Idle');
@@ -50,7 +51,9 @@ const Home = ({ }) => {
     try {
       setStatus('Calling native module...');
       // Example: Replace with your actual method from the spec
-      const result = await NativeAudioCodeCall.startCall?.({destination:'12345'});
+      const result = await NativeAudioCodeCall.startCall?.({
+        destination: '12345',
+      });
       setStatus(`Native call success: ${JSON.stringify(result)}`);
     } catch (err) {
       console.error(err);
@@ -69,6 +72,7 @@ const Home = ({ }) => {
   const handleConfirm = () => {
     setModalVisible(false);
     // perform discard action here
+    navigation.navigate('CallScreen');
   };
 
   const openDialPad = async () => {
@@ -88,7 +92,7 @@ const Home = ({ }) => {
       console.error(err);
     }
   };
-  const renderItem = ({ item, index }:any) => (
+  const renderItem = ({ item, index }: any) => (
     <TouchableOpacity
       style={styles.itemContainer(index)}
       activeOpacity={0.7}
@@ -110,6 +114,7 @@ const Home = ({ }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.txt_title}>{Strings.title_categories}</Text>
+      {/* <Text style={styles.txt_title}>{status}</Text> */}
       <FlatList
         data={Data.categories}
         keyExtractor={item => item?.id}

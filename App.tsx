@@ -7,6 +7,9 @@ import CategoryScreen from './src/screens/categories';
 import DialPadScreen from './src/screens/dialpad';
 import InitScreen from './src/screens/getstarted';
 import AudioCode from './src/screens/audiocode';
+import CallScreen from './src/screens/callscreen/callentry';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 
 export type RootStackParamList = {
   InitScreen: undefined;
@@ -16,28 +19,36 @@ export type RootStackParamList = {
     imgPath: any;
   };
   AudioCode: undefined;
+  CallScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="InitScreen">
-        <Stack.Screen
-          name="InitScreen"
-          component={InitScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Detail" component={CategoryScreen} />
-        <Stack.Screen
-          name="AudioCode"
-          component={AudioCode}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="InitScreen">
+          <Stack.Screen
+            name="InitScreen"
+            component={InitScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Detail" component={CategoryScreen} />
+          <Stack.Screen
+            name="AudioCode"
+            component={AudioCode}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CallScreen"
+            component={CallScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
